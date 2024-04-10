@@ -1,0 +1,15 @@
+@font-face {
+  font-family: 'LXGWWenKaiMonoScreen';
+  font-display: swap;
+  src: url('../font/LXGWWenKaiMonoScreen.ttf') format("truetype");
+}
+@font-face {
+    font-family: 'SFMono-Regular';
+    font-display: swap;
+    src: url('../font/SFMono-Regular.otf') format("truetype");
+  }
+@font-face {
+    font-family: 'MonaspaceRadonVarVF';
+    font-display: swap;
+    src: url('../font/MonaspaceRadonVarVF.ttf') format("truetype");
+  }
