@@ -1,15 +1,25 @@
-@font-face {
+/* @font-face {
   font-family: 'LXGWWenKaiMonoScreen';
   font-display: swap;
   src: url('https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/files/lxgwwenkaiscreen-subset-77.woff2') format("woff2");
+} 
+已经用cdn替代
+
+*/
+@font-face {
+  font-family: 'SFMono-Regular';
+  font-display: swap;
+  src: url('../font/SFMono-Regular.otf') format("truetype");
 }
+
+/* @font-face {
+  font-family: 'MonaspaceRadonVarVF';
+  font-display: swap;
+  src: url('../font/MonaspaceRadonVarVF.ttf') format("truetype");
+} */
+
 @font-face {
-    font-family: 'SFMono-Regular';
-    font-display: swap;
-    src: url('../font/SFMono-Regular.otf') format("truetype");
-  }
-@font-face {
-    font-family: 'MonaspaceRadonVarVF';
-    font-display: swap;
-    src: url('../font/MonaspaceRadonVarVF.ttf') format("truetype");
-  }
+  font-family: 'MonaspaceRadonVarVF';
+  font-display: swap;
+  src: url('../font/MonaspaceRadonVarVF.woff2') format("woff2");
+}
