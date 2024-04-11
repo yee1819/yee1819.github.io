@@ -1,7 +1,7 @@
 @font-face {
   font-family: 'LXGWWenKaiMonoScreen';
   font-display: swap;
-  src: url('../font/LXGWWenKaiMonoScreen.ttf') format("truetype");
+  src: url('https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/files/lxgwwenkaiscreen-subset-77.woff2') format("woff2");
 }
 @font-face {
     font-family: 'SFMono-Regular';
