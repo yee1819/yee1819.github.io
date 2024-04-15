@@ -3394,8 +3394,13 @@ h1.page-title + .tag-cloud-list {
 #footer-wrap a {
   color: var(--light-grey);
 }
+#footer-wrap a padding,
 #footer-wrap a:hover {
   text-decoration: underline;
+  background-color: rgba(66,89,239,0.533);
+  border: 2px;
+  padding: 0.5rem;
+  border-radius: 8px;
 }
 #footer-wrap .footer-separator {
   margin: 0 4px;
