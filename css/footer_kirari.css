@@ -48,6 +48,20 @@
     line-height: 1;
 }
 
+/*  */
+#nav .kirari-nav-box {
+transition: .5s   ;
+
+   max-width: 1170px;
+    width: 100%;
+    display: flex;
+    justify-content: center; /* 新增这一行 */
+    align-items: center;
+    margin: 0 auto; /* 可选：将此容器水平居中 */
+}
+
+
+
 
 /*
 div#rightside-config-show {

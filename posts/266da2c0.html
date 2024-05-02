@@ -1,0 +1,272 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Sql中where和join...on连接的区别 | Kirari</title><meta name="author" content="Kirari"><meta name="copyright" content="Kirari"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="INNER JOIN ON 和 WHERE 连接不同表的区别">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Sql中where和join...on连接的区别">
+<meta property="og:url" content="http://example.com/posts/266da2c0.html">
+<meta property="og:site_name" content="Kirari">
+<meta property="og:description" content="INNER JOIN ON 和 WHERE 连接不同表的区别">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg">
+<meta property="article:published_time" content="2022-06-23T20:44:17.000Z">
+<meta property="article:modified_time" content="2024-05-02T08:41:59.375Z">
+<meta property="article:author" content="Kirari">
+<meta property="article:tag" content="sql">
+<meta property="article:tag" content="笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg"><link rel="shortcut icon" href="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5CmarkdownImage_1702755412321.png"><link rel="canonical" href="http://example.com/posts/266da2c0.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"这篇文章距离上一次更新已经过了","messageNext":"天 , 请注意内容是否有效"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Sql中where和join...on连接的区别',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-05-02 16:41:59'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/fontFamily.css"><link href="https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/lxgwwenkaiscreen.min.css" rel="stylesheet"><link rel="stylesheet" href="/css/footer_kirari.css"><link rel="stylesheet" href="/css/article_all_index.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5CmarkdownImage_1702755412321.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw far fa-bookmark"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/posts/1ec2913a.html"><i class="fa-fw fas fa-thumbs-up"></i><span> 推荐文章</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-camera"></i><span> 图片</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://music.kiko2568.top"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://life.kiko2568.top/index.php/category/shuoshuo/"><i class="fa-fw fas fa-mug-hot"></i><span> 动态</span></a></li><li><a class="site-page child" href="/Blogtimeline/"><i class="fa-fw fas fa-hourglass-half"></i><span> 博客时光机</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://chat.kiko2568.top/"><i class="fa-fw fas fa-robot"></i><span> KioChat</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg')"><nav id="nav"><div class="kirari-nav-box"><span id="blog-info"><a href="/" title="Kirari"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5CmarkdownImage_1702755412321.png"/><span class="site-name">Kirari</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw far fa-bookmark"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/posts/1ec2913a.html"><i class="fa-fw fas fa-thumbs-up"></i><span> 推荐文章</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-camera"></i><span> 图片</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://music.kiko2568.top"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://life.kiko2568.top/index.php/category/shuoshuo/"><i class="fa-fw fas fa-mug-hot"></i><span> 动态</span></a></li><li><a class="site-page child" href="/Blogtimeline/"><i class="fa-fw fas fa-hourglass-half"></i><span> 博客时光机</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://chat.kiko2568.top/"><i class="fa-fw fas fa-robot"></i><span> KioChat</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></div></nav><div id="post-info"><h1 class="post-title">Sql中where和join...on连接的区别</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2022-06-23T20:44:17.000Z" title="发表于 2022-06-24 04:44:17">2022-06-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-05-02T08:41:59.375Z" title="更新于 2024-05-02 16:41:59">2024-05-02</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/sql/">sql</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">993</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>3分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Sql中where和join...on连接的区别"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="浅析SQL语句中俩种内连接的区别"><a href="#浅析SQL语句中俩种内连接的区别" class="headerlink" title="浅析SQL语句中俩种内连接的区别"></a>浅析SQL语句中俩种内连接的区别</h1><blockquote>
+<p> 在SQL语言中，查询数据总是免不了多表查询，而内连接是我们在日常使用中最经常使用的一种连接查询。而经常使用的内连接中，有人喜欢用<code>INNER JOIN ON</code>这种连接，又有人喜欢用<code>WHERE TAB_1.列名 = tab_2.列名</code>的方式，那么他们又有什么区别呢。</p>
+</blockquote>
+<div class="note primary modern"><p>primary  2022-06-24发表在csdn的<a target="_blank" rel="noopener" href="https://blog.csdn.net/Yee1819/article/details/125437905?spm=1001.2014.3001.5502">文章</a>，移植一下</p>
+</div>
+<p>首先建立我们要建立几张表</p>
+<div class="tabs" id="sql代码"><ul class="nav-tabs"><button type="button" class="tab  active" data-href="sql代码-1">classes表</button><button type="button" class="tab " data-href="sql代码-2">students表</button><button type="button" class="tab " data-href="sql代码-3">kechen表</button></ul><div class="tab-contents"><div class="tab-item-content active" id="sql代码-1"><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> classes(</span><br><span class="line">	id <span class="type">int</span>(<span class="number">5</span>) <span class="keyword">PRIMARY</span> KEY  AUTO_INCREMENT,</span><br><span class="line">	class_name <span class="type">varchar</span>(<span class="number">20</span>),</span><br><span class="line">    kemu  enum(<span class="string">&#x27;文科&#x27;</span>,<span class="string">&#x27;理科&#x27;</span>,<span class="string">&#x27;艺术&#x27;</span>,<span class="string">&#x27;体育&#x27;</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> classes (id,class_name,kemu) </span><br><span class="line"><span class="keyword">values</span> </span><br><span class="line">(<span class="number">16</span>,<span class="string">&#x27;十六班&#x27;</span>,<span class="string">&#x27;理科&#x27;</span>),</span><br><span class="line">(<span class="number">15</span>,<span class="string">&#x27;十五班 &#x27;</span>,<span class="string">&#x27;文科&#x27;</span>),</span><br><span class="line">(<span class="number">24</span>,<span class="string">&#x27;二十四班&#x27;</span>,<span class="string">&#x27;艺术&#x27;</span>),</span><br><span class="line">(<span class="number">8</span>,<span class="string">&#x27;八班&#x27;</span>,<span class="string">&#x27;体育&#x27;</span>);</span><br></pre></td></tr></table></figure></div><div class="tab-item-content" id="sql代码-2"><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span>  <span class="keyword">table</span> students(</span><br><span class="line">	name <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">    id <span class="type">int</span>(<span class="number">10</span>)  <span class="keyword">PRIMARY</span> KEY  AUTO_INCREMENT,</span><br><span class="line">	sex enum(<span class="string">&#x27;男&#x27;</span>,<span class="string">&#x27;女&#x27;</span>),</span><br><span class="line">    age  <span class="type">int</span>(<span class="number">5</span>),</span><br><span class="line">    class_id <span class="type">int</span>(<span class="number">5</span>),</span><br><span class="line">    <span class="keyword">FOREIGN</span> KEY(class_id) <span class="keyword">REFERENCES</span> classes(id)</span><br><span class="line">);</span><br><span class="line">#或用语句单独设置外键</span><br><span class="line">#<span class="keyword">alter</span> <span class="keyword">table</span> students <span class="keyword">add</span> <span class="keyword">FOREIGN</span> KEY class_id   <span class="keyword">REFERENCES</span> classes(id);</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> students (name,id,sex,age,class_id) <span class="keyword">values</span>(<span class="string">&#x27;yxq&#x27;</span>,<span class="number">10001</span>,<span class="string">&#x27;男&#x27;</span>,<span class="number">19</span>,<span class="number">16</span>),</span><br><span class="line">(<span class="string">&#x27;yee&#x27;</span>,<span class="number">10002</span>,<span class="string">&#x27;男&#x27;</span>,<span class="number">20</span>,<span class="number">16</span>),(<span class="string">&#x27;kkk&#x27;</span>,<span class="number">10003</span>,<span class="string">&#x27;女&#x27;</span>,<span class="number">21</span>,<span class="number">16</span>),(<span class="string">&#x27;小明&#x27;</span>,<span class="number">10004</span>,<span class="string">&#x27;男&#x27;</span>,<span class="number">20</span>,<span class="number">24</span>),</span><br><span class="line">(<span class="string">&#x27;小红&#x27;</span>,<span class="number">10005</span>,<span class="string">&#x27;女&#x27;</span>,<span class="number">19</span>,<span class="number">15</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure></div><div class="tab-item-content" id="sql代码-3"><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> kechen(</span><br><span class="line">	k_id <span class="type">int</span>(<span class="number">10</span>) <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">    k_name <span class="type">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="keyword">null</span>,</span><br><span class="line">    k_score <span class="type">int</span>(<span class="number">5</span>)</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> kechen <span class="keyword">add</span> <span class="keyword">foreign</span> key(k_id) <span class="keyword">references</span> students(id);</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> kechen(k_id,k_name,k_score)<span class="keyword">values</span>(<span class="number">10001</span>,<span class="string">&#x27;C语言&#x27;</span>,<span class="number">97</span>),</span><br><span class="line">(<span class="number">10001</span>,<span class="string">&#x27;英语&#x27;</span>,<span class="number">54</span>);</span><br><span class="line"><span class="keyword">insert</span> <span class="keyword">into</span> kechen(k_id,k_name,k_score)<span class="keyword">values</span>(<span class="number">10003</span>,<span class="string">&#x27;英语&#x27;</span>,<span class="number">99</span>),</span><br><span class="line">(<span class="number">10003</span>,<span class="string">&#x27;高等数学&#x27;</span>,<span class="number">59</span>),(<span class="number">10001</span>,<span class="string">&#x27;Python&#x27;</span>,<span class="number">79</span>),(<span class="number">10001</span>,<span class="string">&#x27;数据结构&#x27;</span>,<span class="number">81</span>),</span><br><span class="line">(<span class="number">10002</span>,<span class="string">&#x27;体育&#x27;</span>,<span class="number">61</span>),(<span class="number">10004</span>,<span class="string">&#x27;美术&#x27;</span>,<span class="string">&#x27;90&#x27;</span>);</span><br></pre></td></tr></table></figure></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+<p><strong>三张表如下</strong>：</p>
+<div class="tabs" id=""><ul class="nav-tabs"><button type="button" class="tab  active" data-href="-1">classes表</button><button type="button" class="tab " data-href="-2">students表</button><button type="button" class="tab " data-href="-3">kechen表</button></ul><div class="tab-contents"><div class="tab-item-content active" id="-1"><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown%E8%A1%A8%E4%B8%80.png" alt="classes表"></p></div><div class="tab-item-content" id="-2"><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown%E8%A1%A8%E4%B8%89.png" alt="student表"></p></div><div class="tab-item-content" id="-3"><p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown%E8%A1%A8%E4%BA%8C.png" alt="kemu表"></p></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+<p>现在我们开始连接查询，看看它们有什么不同</p>
+<div class="tabs" id=""><ul class="nav-tabs"><button type="button" class="tab  active" data-href="-1">where连接</button><button type="button" class="tab " data-href="-2">join...on连接</button></ul><div class="tab-contents"><div class="tab-item-content active" id="-1"><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> classes,students</span><br><span class="line"><span class="keyword">WHERE</span> classes.id<span class="operator">=</span>students.class_id;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这是<code>WHERE tab_1.列名=tab_2.列名</code>的查询结果：</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown%E7%AC%AC%E4%B8%80%E7%A7%8D%E8%BF%90%E8%A1%8C%E7%BB%93%E6%9E%9C.png" alt="where连接"></p></div><div class="tab-item-content" id="-2"><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span></span><br><span class="line"><span class="keyword">FROM</span> classes</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> students</span><br><span class="line"><span class="keyword">ON</span> classes.id<span class="operator">=</span>students.class_id;</span><br></pre></td></tr></table></figure>
+<p>这是<code>FROM tab_1 JOIN tab_2 ON tab_1.列名=tab_2.列名</code>连接方式的查询结果:</p>
+<p><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdownjoin%E8%BF%9E%E6%8E%A5.png" alt="join...in连接"></p></div></div><div class="tab-to-top"><button type="button" aria-label="scroll to top"><i class="fas fa-arrow-up"></i></button></div></div>
+<p>我们仔细对比一下，好像并没有什么差别，至少在视觉上的结果上来说 。</p>
+<p>但是，事实上真的是如此吗？</p>
+<font size=6 color=red>当然不是</font>
+
+<p>这两种连接方式的差别牵扯到<code>效率的快慢</code>。为什么这么说呢？</p>
+<p>因为这两个查询方式的顺序的差别。我们再回过头对比一下两种查询语句的区别</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">意义</th>
+<th style="text-align:center">WHERE条件查询</th>
+<th style="text-align:center">INNER JOIN ON内查询</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">查询内容</td>
+<td style="text-align:center">SELECT *</td>
+<td style="text-align:center">SELECT *</td>
+</tr>
+<tr>
+<td style="text-align:center">表格连接方式</td>
+<td style="text-align:center">FROM classes,students</td>
+<td style="text-align:center">FROM classes INNER JOIN students</td>
+</tr>
+<tr>
+<td style="text-align:center">连接条件</td>
+<td style="text-align:center">WHERE classes.id=students.class_id;</td>
+<td style="text-align:center">ON classes.id=students.class_id;</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>我们看到第一步的投影和第三步的条件选择基本没有什么大的差距，问题就出现在第二步的<code>FROM</code>之中！</p>
+<p>造成连接方式的效率差距就体现在FROM之中，当查询使用第一种WHERE条件连接的时候，程序会在内部先将classes表和students表<font size=5>先使用笛卡尔积串联在一起</font>，再执行下一步where挑选出两表中的外键连接起来。</p>
+<p>而第二种查询使用的是INNER JOIN ON查询，先显示一张表格，再从另外一张表格里挑选出符合条件可连接的元组，之后才连接起来。</p>
+<p>看到这里，你可能会嗤之以鼻，觉得这一点的效率无伤大雅，那么数据量大的时候呢，加入两张表都有10w条数据，<font color=greed>使用where连接的话会出现100000*100000=10000000000，100亿条数据！</font>之后再从这一百亿条数据里筛选出符合连接条件的语句，想一想都觉得慢，而INNER JOIN ON内查询的话就能大大增加效率！！</p>
+<font size=5 color=red>总而言之,WHERE条件查询 和  INNER JOIN ON内查询的差别在于效率的高低，而查询结果并没有什么不同。</font>
+
+<p>所以，条件允许的话，就请尽量使用<code>JOIN ON</code>连接多个表吧 ！！！</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="http://example.com">Kirari</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/posts/266da2c0.html">http://example.com/posts/266da2c0.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Kirari</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/sql/">sql</a><a class="post-meta__tags" href="/tags/%E7%AC%94%E8%AE%B0/">笔记</a></div><div class="post_share"><div class="social-share" data-image="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/posts/4a17b156.html" title="Hello World"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">Hello World</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%85%E6%9E%90SQL%E8%AF%AD%E5%8F%A5%E4%B8%AD%E4%BF%A9%E7%A7%8D%E5%86%85%E8%BF%9E%E6%8E%A5%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.</span> <span class="toc-text">浅析SQL语句中俩种内连接的区别</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background: rgb(0,0,0,0)"><div id="footer-wrap"><div id="footer-bar-links"><div id="footer_left"><div class="copyright">&copy;2023 - 2024 By <a target="_blank" rel="noopener" href="https://kiko2568.top">Kirari</a></div><span class="footer-separator">|</span><div class="framework-info"><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><div id="footer_right"><div class="footer_custom_text"><a href="https://icp.gov.moe/?keyword=20232568" target="_blank">萌ICP备20232568号</a>|<a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/shouye.html">桂ICP备2024029447号-1</a></div></div></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-comments-tau.vercel.app/',
+      region: 'ap-shanghai',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') setTimeout(init,0)
+    else getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(init)
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-comments-tau.vercel.app/',
+      region: 'ap-shanghai',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else {
+      loadTwikoo()
+      
+    }
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script src="/js/randomTopImg.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
