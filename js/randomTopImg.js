@@ -2,7 +2,24 @@
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
 const jsonUrl = isMobile ? '../json/m_top_img.json' : '../json/top_img.json';
+const bg_json = "../json/bg.json"
+// 随机背景图
+fetch(bg_json)
+  .then(response => response.json())
+  .then(data => {
+    const bg_json_len = data.color.length;
+    const random_bg = getRandomInt(0, bg_json_len);
+    const bg_color = document.getElementById("body-wrap");
+    const bg_ran_re = data.color[random_bg];
+    bg_color.style.background = bg_ran_re.c1;
+    bg_color.style.background = bg_ran_re.c2;
+    bg_color.style.background = bg_ran_re.c3;
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
 
+// 头顶图随机
 fetch(jsonUrl)
   .then(response => {
     if (!response.ok) {
@@ -11,6 +28,7 @@ fetch(jsonUrl)
     return response.json();
   })
   .then(data => {
+
     var img_length_top = data.links.length;
     var random_img_top =  getRandomInt(0,img_length_top);
     var img_top = document.getElementById("page-header");
