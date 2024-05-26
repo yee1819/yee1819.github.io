@@ -83,3 +83,17 @@ var screenHeight ;
 
   // Event listener for scroll event
   window.addEventListener('scroll', updateScrollDistance);
+
+
+
+//sakana
+  document.addEventListener('DOMContentLoaded', function() {
+    // let i=0;
+    var sakanawidgetctrl = document.querySelectorAll('.sakana-widget-ctrl a');
+    sakanawidgetctrl.forEach(function(element) {
+        // i+=1;
+        // if(i==3){
+          element.style.display = 'none';
+        // }
+    });
+});
