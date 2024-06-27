@@ -5,6 +5,8 @@
 } 
 已经用cdn替代
 
+
+
 */
 @font-face {
   font-family: 'SFMono-Regular';
@@ -23,3 +25,9 @@
   font-display: swap;
   src: url('../font/MonaspaceRadonVarVF.woff2') format("woff2");
 }
+
+#article-container>p{
+	font-size : 18px;
+}
+
+

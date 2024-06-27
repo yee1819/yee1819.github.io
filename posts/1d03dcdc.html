@@ -1,0 +1,338 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>初学redis对于微信步数排行榜的想法 | Kirari</title><meta name="author" content="Kirari"><meta name="copyright" content="Kirari"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="这几天刚看完基本的五个数据类型的操作，对于redis实现微信步数排行榜的小想法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="初学redis对于微信步数排行榜的想法">
+<meta property="og:url" content="http://example.com/posts/1d03dcdc.html">
+<meta property="og:site_name" content="Kirari">
+<meta property="og:description" content="这几天刚看完基本的五个数据类型的操作，对于redis实现微信步数排行榜的小想法">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg">
+<meta property="article:published_time" content="2024-06-27T07:24:09.000Z">
+<meta property="article:modified_time" content="2024-06-27T10:03:31.561Z">
+<meta property="article:author" content="Kirari">
+<meta property="article:tag" content="redis">
+<meta property="article:tag" content="想法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg"><link rel="shortcut icon" href="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5CmarkdownImage_1702755412321.png"><link rel="canonical" href="http://example.com/posts/1d03dcdc.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: {"limitDay":365,"position":"top","messagePrev":"这篇文章距离上一次更新已经过了","messageNext":"天 , 请注意内容是否有效"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":300},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: true,
+  islazyload: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: true,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '初学redis对于微信步数排行榜的想法',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-27 18:03:31'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/fontFamily.css"><link href="https://cdn.bootcdn.net/ajax/libs/lxgw-wenkai-screen-webfont/1.7.0/lxgwwenkaiscreen.min.css" rel="stylesheet"><link rel="stylesheet" href="/css/footer_kirari.css"><link rel="stylesheet" href="/css/article_all_index.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/font-awesome-animation.min.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/tag_plugins.css" media="defer" onload="this.media='all'"><script src="https://npm.elemecdn.com/hexo-butterfly-tag-plugins-plus@latest/lib/assets/carousel-touch.js"></script><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5CmarkdownImage_1702755412321.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">19</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw far fa-bookmark"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/posts/1ec2913a.html"><i class="fa-fw fas fa-thumbs-up"></i><span> 推荐文章</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-camera"></i><span> 图片</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://music.kiko2568.top"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://life.kiko2568.top/index.php/category/shuoshuo/"><i class="fa-fw fas fa-mug-hot"></i><span> 动态</span></a></li><li><a class="site-page child" href="/Blogtimeline/"><i class="fa-fw fas fa-hourglass-half"></i><span> 博客时光机</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://chat.kiko2568.top/"><i class="fa-fw fas fa-robot"></i><span> KioChat</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg')"><nav id="nav"><div class="kirari-nav-box"><span id="blog-info"><a href="/" title="Kirari"><img class="site-icon" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5CmarkdownImage_1702755412321.png"/><span class="site-name">Kirari</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw far fa-bookmark"></i><span> 文章</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></li><li><a class="site-page child" href="/posts/1ec2913a.html"><i class="fa-fw fas fa-thumbs-up"></i><span> 推荐文章</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 更多</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-camera"></i><span> 图片</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://music.kiko2568.top"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://life.kiko2568.top/index.php/category/shuoshuo/"><i class="fa-fw fas fa-mug-hot"></i><span> 动态</span></a></li><li><a class="site-page child" href="/Blogtimeline/"><i class="fa-fw fas fa-hourglass-half"></i><span> 博客时光机</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://chat.kiko2568.top/"><i class="fa-fw fas fa-robot"></i><span> KioChat</span></a></li><li><a class="site-page child" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友情链接</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></div></nav><div id="post-info"><h1 class="post-title">初学redis对于微信步数排行榜的想法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-27T07:24:09.000Z" title="发表于 2024-06-27 15:24:09">2024-06-27</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-27T10:03:31.561Z" title="更新于 2024-06-27 18:03:31">2024-06-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/redis/">redis</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">1.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>8分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="初学redis对于微信步数排行榜的想法"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>这段时间学了一些redis五种常用类型基本操作，看见好多人说有序集合比较适合实现各种各样的排行榜功能，我就想到了微信步数排行榜，想到了我是不是可以通过有序集合来实现这个功能呢。</p>
+<p>那就来试试看吧！ （想法可能不成熟，勿喷！！）</p>
+<h2 id="微信步数排行榜的基本功能"><a href="#微信步数排行榜的基本功能" class="headerlink" title="微信步数排行榜的基本功能"></a>微信步数排行榜的基本功能</h2><p>要实现微信步数排行榜先看看微信步数排行榜都有什么功能</p>
+<ol>
+<li><p>最基本的功能，查看排行信息 、点赞</p>
+ <image title="微信步数排行榜" src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com//blog13f2f49c624f9d7347dae013b60ad0d.webp"  width="25%"/>
+</li>
+<li><p>凌晨刷新步数，全部清除为0</p>
+</li>
+<li><p>已占领N个朋友的封面</p>
+ <image  titile="占领朋友封面" src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com//blog350fd59d209baa08282c005ced383aa.webp" width="25%"/>
+</li>
+<li><p>加入、退出 排行榜</p>
+<p>消息可以使用spring的Task定时每天十点半发送消息，不是redis的功能</p>
+<image title="排行榜功能启用与暂停" src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com//blogfba819cd8737f7d7b54a70b1df5b456.webp" width="25%">
+</li>
+<li><p>不与他排行</p>
+<p>不让这个人参与我的排行榜</p>
+</li>
+<li><p>停用</p>
+<p>与退出排行榜差不多</p>
+<image title="微信运动设置界面" src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com//blogfe86b2f038385c75ace38860eaad394.webp" width="25%"/>
+
+</li>
+</ol>
+<h2 id="功能实现"><a href="#功能实现" class="headerlink" title="功能实现"></a>功能实现</h2><p>首先假定微信运动用户为以下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zadd rankall 0 aaaa 0 bbbb 0 cccc 0 dddd 0 eeee 0 ffff 0 gggg 0 hhhh 0 iiii 0 jjjj 0 kkkk 0  xiaoming  0 libai 0 zhangsan 0 lisi  0 wangwu 0 xiongda 0 kirari</span><br><span class="line">127.0.0.1:6379&gt; ZRANGE rankall 0 -1</span><br><span class="line"> 1) <span class="string">&quot;aaaa&quot;</span></span><br><span class="line"> 2) <span class="string">&quot;bbbb&quot;</span></span><br><span class="line"> 3) <span class="string">&quot;cccc&quot;</span></span><br><span class="line"> 4) <span class="string">&quot;dddd&quot;</span></span><br><span class="line"> 5) <span class="string">&quot;eeee&quot;</span></span><br><span class="line"> 6) <span class="string">&quot;ffff&quot;</span></span><br><span class="line"> 7) <span class="string">&quot;gggg&quot;</span></span><br><span class="line"> 8) <span class="string">&quot;hhhh&quot;</span></span><br><span class="line"> 9) <span class="string">&quot;iiii&quot;</span></span><br><span class="line">10) <span class="string">&quot;jjjj&quot;</span></span><br><span class="line">11) <span class="string">&quot;kirari&quot;</span></span><br><span class="line">12) <span class="string">&quot;kkkk&quot;</span></span><br><span class="line">13) <span class="string">&quot;libai&quot;</span></span><br><span class="line">14) <span class="string">&quot;lisi&quot;</span></span><br><span class="line">15) <span class="string">&quot;wangwu&quot;</span></span><br><span class="line">16) <span class="string">&quot;xiaoming&quot;</span></span><br><span class="line">17) <span class="string">&quot;xiongda&quot;</span></span><br><span class="line">18) <span class="string">&quot;zhangsan&quot;</span></span><br></pre></td></tr></table></figure>
+<p>用户Kirari的好友们有</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zadd kirariRank 0 aaaa 0 bbbb 0  cccc 0 libai 0 lisi 0 xiaoming 0 kirari</span><br><span class="line">(<span class="built_in">integer</span>) 6</span><br><span class="line">127.0.0.1:6379&gt; ZRANGE kirariRank 0 -1</span><br><span class="line">1) <span class="string">&quot;libai&quot;</span></span><br><span class="line">2) <span class="string">&quot;xiaoming&quot;</span></span><br><span class="line">3) <span class="string">&quot;lisi&quot;</span></span><br><span class="line">4) <span class="string">&quot;cccc&quot;</span></span><br><span class="line">5) <span class="string">&quot;kirari&quot;</span></span><br><span class="line">6) <span class="string">&quot;aaaa&quot;</span></span><br><span class="line">7) <span class="string">&quot;bbbb&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="排行榜的实现"><a href="#排行榜的实现" class="headerlink" title="排行榜的实现"></a>排行榜的实现</h3><p>默默造数据中…..不会写shell脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZINCRBY rankall 9999 kirari</span><br><span class="line"><span class="string">&quot;9999&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; ZINCRBY rankall 10000 aaaa</span><br><span class="line"><span class="string">&quot;10000&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; ZINCRBY rankall 3691 lisi</span><br><span class="line"><span class="string">&quot;3691&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; ZINCRBY rankall 5963 cccc</span><br><span class="line"><span class="string">&quot;5963&quot;</span></span><br><span class="line">127.0.0.1:6379&gt; ZINCRBY rankall 20000 bbbb</span><br><span class="line"><span class="string">&quot;20000&quot;</span></span><br></pre></td></tr></table></figure>
+<p>微信运动在数据来源（用户的手机、手表）收集到了运动数据后现在总排行榜进行设置运动步数</p>
+<p>当用户发动请求查看运动排行榜时使用并集把数据赋值给赋值给用户就完成了排行榜的实现：</p>
+<p><code>ZINTERSTORE destination numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX]</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZINTERSTORE kirariRank 2 kirariRank rankall aggregate max</span><br><span class="line">(<span class="built_in">integer</span>) 7</span><br><span class="line">127.0.0.1:6379&gt; ZREVRANGE kirariRank 0 -1 withscores</span><br><span class="line"> 1) <span class="string">&quot;bbbb&quot;</span></span><br><span class="line"> 2) <span class="string">&quot;20000&quot;</span></span><br><span class="line"> 3) <span class="string">&quot;aaaa&quot;</span></span><br><span class="line"> 4) <span class="string">&quot;10000&quot;</span></span><br><span class="line"> 5) <span class="string">&quot;kirari&quot;</span></span><br><span class="line"> 6) <span class="string">&quot;9999&quot;</span></span><br><span class="line"> 7) <span class="string">&quot;cccc&quot;</span></span><br><span class="line"> 8) <span class="string">&quot;5963&quot;</span></span><br><span class="line"> 9) <span class="string">&quot;lisi&quot;</span></span><br><span class="line">10) <span class="string">&quot;3691&quot;</span></span><br><span class="line">11) <span class="string">&quot;xiaoming&quot;</span></span><br><span class="line">12) <span class="string">&quot;0&quot;</span></span><br><span class="line">13) <span class="string">&quot;libai&quot;</span></span><br><span class="line">14) <span class="string">&quot;0&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意进行交集运算的时候是要rankall总排行榜与用户的交集而不是把rankall整个复制（踩坑了…）</p>
+<p>并且设置模式为最大值替换，因为你的好友可能会在运动！</p>
+</blockquote>
+<p>排行榜做好了，发现bbbb用户是运动步数最多的人，并且按照步数从大到小进行排名！</p>
+<h3 id="整点运动步数清零"><a href="#整点运动步数清零" class="headerlink" title="整点运动步数清零"></a>整点运动步数清零</h3><p>我想到的方法是再创建一个有序集合，这个有序集合中的所有score均为0</p>
+<p>每当一天过去的零点整点发送命令：</p>
+<p><code>ZINTERSTORE destination numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX]</code></p>
+<p>来实现零点运动步数清零（这里使用交集和并集合似乎都可以，但是为了后面的停用功能使用交集）</p>
+<p>测试：</p>
+<p>现在的情况只有kirari是有步数（懒得造数据….只要被清零效果都一样）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZREVRANGE rankall 0 -1 withscores</span><br><span class="line"> 1) <span class="string">&quot;kirari&quot;</span></span><br><span class="line"> 2) <span class="string">&quot;11&quot;</span></span><br><span class="line"> 3) <span class="string">&quot;zhangsan&quot;</span></span><br><span class="line"> 4) <span class="string">&quot;0&quot;</span></span><br><span class="line"> 5) <span class="string">&quot;xiongda&quot;</span></span><br><span class="line"> 6) <span class="string">&quot;0&quot;</span></span><br><span class="line"> 7) <span class="string">&quot;xiaoming&quot;</span></span><br><span class="line"> 8) <span class="string">&quot;0&quot;</span></span><br><span class="line"> ....</span><br></pre></td></tr></table></figure>
+<p>到了零点发送命令：<code>ZINTERSTORE rankall 1 zero aggregate min</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZINTERSTORE rankall 2 zero rankall aggregate min</span><br><span class="line">(<span class="built_in">integer</span>) 18</span><br><span class="line">127.0.0.1:6379&gt; ZRANGE rankall 0 -1 withscores</span><br><span class="line"> 1) <span class="string">&quot;aaaa&quot;</span></span><br><span class="line"> 2) <span class="string">&quot;0&quot;</span></span><br><span class="line"> 3) <span class="string">&quot;bbbb&quot;</span></span><br><span class="line"> 4) <span class="string">&quot;0&quot;</span></span><br><span class="line"> 5) <span class="string">&quot;cccc&quot;</span></span><br><span class="line"> 6) <span class="string">&quot;0&quot;</span></span><br><span class="line"> ......</span><br></pre></td></tr></table></figure>
+<p>发现所有步数数据已经清零</p>
+<h3 id="点赞"><a href="#点赞" class="headerlink" title="点赞"></a>点赞</h3><p>使用集合来实现</p>
+<p>用户aaaa、bbbb、cccc点赞给kirari点赞，查看点赞的人是谁，随后bbbb又取消点赞的实现：</p>
+<ol>
+<li>用户aaaa、bbbb、cccc惊叹我的运动步数来给我点赞<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; sadd kirariGood aaaa bbbb cccc</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br></pre></td></tr></table></figure></li>
+<li>我查看有谁给我点赞了<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SMEMBERS kirariGood</span><br><span class="line">1) <span class="string">&quot;cccc&quot;</span></span><br><span class="line">2) <span class="string">&quot;bbbb&quot;</span></span><br><span class="line">3) <span class="string">&quot;aaaa&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li>看看点赞的人数<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SCARD kirariGood</span><br><span class="line">(<span class="built_in">integer</span>) 3</span><br></pre></td></tr></table></figure></li>
+<li>bbbb不知道是嫉妒我的运动步数，还是喜欢我害羞了不敢看我的运动步数取消了点赞<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SREM kirariGood bbbb</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br></pre></td></tr></table></figure></li>
+<li>我这个时候查看给我点赞的人发现bbbb不见了<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SMEMBERS kirariGood</span><br><span class="line">1) <span class="string">&quot;cccc&quot;</span></span><br><span class="line">2) <span class="string">&quot;aaaa&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li>点赞人数也变成了2<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; SCARD kirariGood</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br></pre></td></tr></table></figure></li>
+<li>第二天到了清除所有的点赞数据<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; del kirariGood</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; SCARD kirariGood</span><br><span class="line">(<span class="built_in">integer</span>) 0</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="占领N个朋友的封面"><a href="#占领N个朋友的封面" class="headerlink" title="占领N个朋友的封面"></a>占领N个朋友的封面</h3><p>我的想法只有遍历所有开通微信运动的好友中遍历一边，看自己的排名是第几名</p>
+<p>是第一就加一，不是则遍历到最后</p>
+<p>先看一下排行榜：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZREVRANGE kirariRank 0 -1 withscores</span><br><span class="line"> 1) <span class="string">&quot;bbbb&quot;</span></span><br><span class="line"> 2) <span class="string">&quot;20000&quot;</span></span><br><span class="line"> 3) <span class="string">&quot;aaaa&quot;</span></span><br><span class="line"> 4) <span class="string">&quot;10000&quot;</span></span><br><span class="line"> 5) <span class="string">&quot;kirari&quot;</span></span><br><span class="line"> 6) <span class="string">&quot;9999&quot;</span></span><br><span class="line"> 7) <span class="string">&quot;cccc&quot;</span></span><br><span class="line"> 8) <span class="string">&quot;5963&quot;</span></span><br><span class="line"> 9) <span class="string">&quot;lisi&quot;</span></span><br><span class="line">10) <span class="string">&quot;3691&quot;</span></span><br><span class="line">11) <span class="string">&quot;xiaoming&quot;</span></span><br><span class="line">12) <span class="string">&quot;0&quot;</span></span><br><span class="line">13) <span class="string">&quot;libai&quot;</span></span><br><span class="line">14) <span class="string">&quot;0&quot;</span></span><br></pre></td></tr></table></figure>
+<p>查看排名：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZREVRANK kirariRank kirari</span><br><span class="line">(<span class="built_in">integer</span>) 2</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意此时的索引是从0开始的，所以排名要在索引加上1</p>
+<p>即此时我的排名在我的排行榜里是第三名</p>
+</blockquote>
+<h3 id="不让他参与我的排名"><a href="#不让他参与我的排名" class="headerlink" title="不让他参与我的排名"></a>不让他参与我的排名</h3><p>类似删除好友，把这个用户从我的好友中移除</p>
+<p>我们先看一下排行榜</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZINTERSTORE kirariRank 2 kirariRank rankall aggregate max</span><br><span class="line">(<span class="built_in">integer</span>) 7</span><br><span class="line">127.0.0.1:6379&gt; ZREVRANGE kirariRank 0 -1 withscores</span><br><span class="line"> 1) <span class="string">&quot;bbbb&quot;</span></span><br><span class="line"> 2) <span class="string">&quot;20000&quot;</span></span><br><span class="line"> 3) <span class="string">&quot;aaaa&quot;</span></span><br><span class="line"> 4) <span class="string">&quot;10000&quot;</span></span><br><span class="line"> 5) <span class="string">&quot;kirari&quot;</span></span><br><span class="line"> 6) <span class="string">&quot;9999&quot;</span></span><br><span class="line"> 7) <span class="string">&quot;cccc&quot;</span></span><br><span class="line"> 8) <span class="string">&quot;5963&quot;</span></span><br><span class="line"> 9) <span class="string">&quot;lisi&quot;</span></span><br><span class="line">10) <span class="string">&quot;3691&quot;</span></span><br><span class="line">11) <span class="string">&quot;xiaoming&quot;</span></span><br><span class="line">12) <span class="string">&quot;0&quot;</span></span><br><span class="line">13) <span class="string">&quot;libai&quot;</span></span><br><span class="line">14) <span class="string">&quot;0&quot;</span></span><br></pre></td></tr></table></figure>
+<p>可恶！！bbbb居然比我多这么多步，我不想见到他！</p>
+<p>不想见到他</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zrem kirariRank bbbb</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br></pre></td></tr></table></figure>
+<p>再看一下排行榜</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; ZREVRANGE kirariRank 0 -1 withscores</span><br><span class="line"> 1) <span class="string">&quot;aaaa&quot;</span></span><br><span class="line"> 2) <span class="string">&quot;10000&quot;</span></span><br><span class="line"> 3) <span class="string">&quot;kirari&quot;</span></span><br><span class="line"> 4) <span class="string">&quot;9999&quot;</span></span><br><span class="line"> 5) <span class="string">&quot;cccc&quot;</span></span><br><span class="line"> 6) <span class="string">&quot;5963&quot;</span></span><br><span class="line"> 7) <span class="string">&quot;lisi&quot;</span></span><br><span class="line"> 8) <span class="string">&quot;3691&quot;</span></span><br><span class="line"> 9) <span class="string">&quot;xiaoming&quot;</span></span><br><span class="line">10) <span class="string">&quot;0&quot;</span></span><br><span class="line">11) <span class="string">&quot;libai&quot;</span></span><br><span class="line">12) <span class="string">&quot;0&quot;</span></span><br></pre></td></tr></table></figure>
+<p>发现bbbb从我的排行榜消失了</p>
+<h3 id="不加入排行榜"><a href="#不加入排行榜" class="headerlink" title="不加入排行榜"></a>不加入排行榜</h3><p>把我从我自己的表中删除，且从rankall集合中删除</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zrem kirariRank kirari</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zrem rankall kirari</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; ZREVRANGE kirariRank 0 -1 withscores</span><br><span class="line"> 1) <span class="string">&quot;aaaa&quot;</span></span><br><span class="line"> 2) <span class="string">&quot;10000&quot;</span></span><br><span class="line"> 3) <span class="string">&quot;cccc&quot;</span></span><br><span class="line"> 4) <span class="string">&quot;5963&quot;</span></span><br><span class="line"> 5) <span class="string">&quot;lisi&quot;</span></span><br><span class="line"> 6) <span class="string">&quot;3691&quot;</span></span><br><span class="line"> 7) <span class="string">&quot;xiaoming&quot;</span></span><br><span class="line"> 8) <span class="string">&quot;0&quot;</span></span><br><span class="line"> 9) <span class="string">&quot;libai&quot;</span></span><br><span class="line">10) <span class="string">&quot;0&quot;</span></span><br></pre></td></tr></table></figure>
+<p>我就从排行榜消失了</p>
+<h3 id="停用微信运动"><a href="#停用微信运动" class="headerlink" title="停用微信运动"></a>停用微信运动</h3><p>从排行榜集合和整点清零集合中移除，且删除用户 的排行榜集合</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; zrem kirariRank kirari</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; zrem zero kirari</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br><span class="line">127.0.0.1:6379&gt; del kirariRank</span><br><span class="line">(<span class="built_in">integer</span>) 1</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a target="_blank" rel="noopener" href="https://blog.kiko2568.com">Kirari</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="http://example.com/posts/1d03dcdc.html">http://example.com/posts/1d03dcdc.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="http://example.com" target="_blank">Kirari</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/redis/">redis</a><a class="post-meta__tags" href="/tags/%E6%83%B3%E6%B3%95/">想法</a></div><div class="post_share"><div class="social-share" data-image="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/posts/be3f90b4.html" title="Meavn入门"><img class="cover" src= "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="https://yee-1312555989.cos.ap-guangzhou.myqcloud.com/%5Cmarkdown20231217_081022.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Meavn入门</div></div></a></div></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="twikoo-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BE%AE%E4%BF%A1%E6%AD%A5%E6%95%B0%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%8A%9F%E8%83%BD"><span class="toc-number">1.</span> <span class="toc-text">微信步数排行榜的基本功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%9F%E8%83%BD%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.</span> <span class="toc-text">功能实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%92%E8%A1%8C%E6%A6%9C%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.1.</span> <span class="toc-text">排行榜的实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B4%E7%82%B9%E8%BF%90%E5%8A%A8%E6%AD%A5%E6%95%B0%E6%B8%85%E9%9B%B6"><span class="toc-number">2.2.</span> <span class="toc-text">整点运动步数清零</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%82%B9%E8%B5%9E"><span class="toc-number">2.3.</span> <span class="toc-text">点赞</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%A0%E9%A2%86N%E4%B8%AA%E6%9C%8B%E5%8F%8B%E7%9A%84%E5%B0%81%E9%9D%A2"><span class="toc-number">2.4.</span> <span class="toc-text">占领N个朋友的封面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E8%AE%A9%E4%BB%96%E5%8F%82%E4%B8%8E%E6%88%91%E7%9A%84%E6%8E%92%E5%90%8D"><span class="toc-number">2.5.</span> <span class="toc-text">不让他参与我的排名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E5%8A%A0%E5%85%A5%E6%8E%92%E8%A1%8C%E6%A6%9C"><span class="toc-number">2.6.</span> <span class="toc-text">不加入排行榜</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%81%9C%E7%94%A8%E5%BE%AE%E4%BF%A1%E8%BF%90%E5%8A%A8"><span class="toc-number">2.7.</span> <span class="toc-text">停用微信运动</span></a></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background: rgb(0,0,0,0)"><div id="footer-wrap"><div id="footer-bar-links"><div id="footer_left"><div class="copyright">&copy;2023 - 2024 By <a target="_blank" rel="noopener" href="https://kiko2568.top">Kirari</a></div><span class="footer-separator">|</span><div class="framework-info"><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div><div id="footer_right"><div class="footer_custom_text"><a href="https://icp.gov.moe/?keyword=20232568" target="_blank">萌ICP备20232568号</a>|<a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/shouye.html">桂ICP备2024029447号-1</a></div></div></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload/dist/lazyload.iife.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script>(() => {
+  const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+  if ($mermaid.length === 0) return
+  const runMermaid = () => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'default'
+
+    Array.from($mermaid).forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+      const mermaidThemeConfig = '%%{init:{ \'theme\':\'' + theme + '\'}}%%\n'
+      const mermaidID = 'mermaid-' + index
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+
+      const renderV10 = () => {
+        renderFn.then(({svg}) => {
+          mermaidSrc.insertAdjacentHTML('afterend', svg)
+        })
+      }
+
+      const renderV9 = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+      }
+
+      typeof renderFn === 'string' ? renderV9(renderFn) : renderV10()
+    })
+  }
+
+  const loadMermaid = () => {
+    window.loadMermaid ? runMermaid() : getScript('https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js').then(runMermaid)
+  }
+
+  btf.addGlobalFn('themeChange', runMermaid, 'mermaid')
+
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script><script>(() => {
+  const init = () => {
+    twikoo.init(Object.assign({
+      el: '#twikoo-wrap',
+      envId: 'https://twikoo-comments-tau.vercel.app/',
+      region: 'ap-shanghai',
+      onCommentLoaded: () => {
+        btf.loadLightbox(document.querySelectorAll('#twikoo .tk-content img:not(.tk-owo-emotion)'))
+      }
+    }, null))
+  }
+
+  const loadTwikoo = () => {
+    if (typeof twikoo === 'object') setTimeout(init,0)
+    else getScript('https://cdn.jsdelivr.net/npm/twikoo/dist/twikoo.all.min.js').then(init)
+  }
+
+  const getCount = () => {
+    const countELement = document.getElementById('twikoo-count')
+    if(!countELement) return
+    twikoo.getCommentsCount({
+      envId: 'https://twikoo-comments-tau.vercel.app/',
+      region: 'ap-shanghai',
+      urls: [window.location.pathname],
+      includeReply: false
+    }).then(res => {
+      countELement.textContent = res[0].count
+    }).catch(err => {
+      console.error(err)
+    })
+  }
+
+  if ('Twikoo' === 'Twikoo' || !false) {
+    if (false) btf.loadComment(document.getElementById('twikoo-wrap'), loadTwikoo)
+    else {
+      loadTwikoo()
+      
+    }
+  } else {
+    window.loadOtherComment = loadTwikoo
+  }
+})()</script></div><script src="/js/randomTopImg.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script async src="//at.alicdn.com/t/font_2032782_8d5kxvn09md.js"></script><!-- hexo injector body_end end --></body></html>
