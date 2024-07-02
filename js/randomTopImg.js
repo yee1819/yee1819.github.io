@@ -113,5 +113,13 @@ window.onload = function () {
     link.href = currentURL;
     link.textContent = currentURL;
   });
+
+
+  let copyrightNoticeLinks = document.querySelectorAll('.post-copyright__notice > .post-copyright-info a');
+  if (copyrightNoticeLinks.length > 0) {
+    let lastLink = copyrightNoticeLinks[copyrightNoticeLinks.length - 1];
+    lastLink.href = 'http://kiko2568.top';
+  }
+
 };
 
